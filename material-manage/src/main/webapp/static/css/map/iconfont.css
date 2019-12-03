@@ -1,0 +1,29 @@
+@font-face {font-family: "iconfont";
+  src: url('/static/fonts/iconfont.eot?t=1568797144704'); /* IE9 */
+  src: url('/static/fonts/iconfont.eot?t=1568797144704#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAOQAAsAAAAAB7wAAANBAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDHAqCeIJRATYCJAMQCwoABCAFhG0HRRvABsguMYXrA0aTmtoQhTjn3NDdrni72fvzQjz0jf3vzu481fQRk+bZJJuEJtZIUEkZL5FQ/HRof3JNUxqh41zrRswPeSrkL00GQEIDOrIk3BySntzkrT2fxj/w1DpPuwhLNEyL9p9/gMumk9uJI0lbEvxlUMBeDjRVJ777QwLu+//P5fSu+TyQ+e3sXFpz0EXRUS/AOKCAxl5kBVJg3DB2QUtcT6BrrTiGsxV1bcBLMrsF4rEqc8ArE5aS5dpCs2Jsincs2uVN+QDwNvh8/AUyBEWjMvteuFsugqIfqGx4dpU+DyGZzgk2iYrdgCTuV7pvMkXp3Uy66m/MjgLa2go/jHkprD0Um+polBzjj1dUogkR++AwzFR+GB2M4AfEKPxkBBU+SOc2urgLeI/0K9MEi0bfXGWtF4/MJ0FHN6++9LqN65cfbySsbcGHzPW6T+4ibZIv43JY18oYV65fb84ToACvAx5Sj4P3i/yudMT44Utmrr1TsHTq/qDPGXg8ZMV4bky3hRt7W7o1rCLlzrDuIHNYeVG901QHwLo/kQWag2VcZtdF5uhk73l5Krr98oOijSOh2lYtAdWFfIDhBmNdhk6DdydjV0ARX90SsH1u3GQbKTFd/ifz9cW/HvCdjdbAOpNg8TA+FbB9279ZTzQGOoDVfMM04KjNTHa/8PGzvuNmDzkHA/P+vXoJvp9Mn2DRqgT1JfDGJZ0lv0bSsSQ1mWnJVOSOWB+UdrKAgq5l44fkmfqYQrvonCS0MxIGRcsaqNo2o0nfDQ09h6Gp7QR07VI5uWeGMInsYKclAGHsFIqhL1CN3aJJf4eGpT9oGgeGrmsROmfP1lh9SgniKBIhPwZVAbsk20Z9wsIWJDMHR9KygN2BiFuNweSEpHyuErkQmWKAe1hOoVSCEsFOWAE2Qw4HhjrBGhJogkKpnpOYKFW9KEHATuDjDALhUIgI4o2BVALMRfIqUz6F97dAZIwDhzSQqvgOCOGm1g4lS5DUAa1UuzqRbuUSt2GyFBQlgSQE5gRVACfisNIYpFe30iACKoEyIKnLkYjKSV3VCctrnW+4CrrMp2SUqJHR0HqsIl7lsBfFbFTlXLKHyFSFcQAAAAAA') format('woff2'),
+  url('/static/fonts/iconfont.woff?t=1568797144704') format('woff'),
+  url('/static/fonts/iconfont.ttf?t=1568797144704') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('/static/fonts/iconfont.svg?t=1568797144704#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-liebiao:before {
+  content: "\e602";
+}
+
+.icon-touxiang:before {
+  content: "\e620";
+}
+
+.icon-duihua:before {
+  content: "\e775";
+}
+

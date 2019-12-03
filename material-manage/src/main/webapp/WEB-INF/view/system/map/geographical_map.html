@@ -1,0 +1,541 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>管道地图</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <link rel="stylesheet" href="${ctxPath}/static/css/map/map.css"/>
+<script type="text/javascript" src="https://www.w3school.com.cn/jquery/jquery.js"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+</head>
+<body>
+<div id="container"></div>
+
+<div class="div-menu">
+<img src="${ctxPath}/static/img/map/menu.png" style="width:3rem;height:3rem;" onclick="setMenuVisibility()"/>
+<div class="menu" id="menu" style="display:none;">
+    <div class="arrow-menu"></div>
+	<h4 id="legendBtn" style="color:#fff; width:100%; padding-left:1.5rem;" onclick="setLegenVisibility()">显示管线图例</h4>
+	<!--<h4 style="color:#fff; width:100%; padding-left:1.5rem;">退出</h4>-->
+</div>
+</div>
+<div class="div-legend" id="legend" style="display:none;">
+	<div class="info-top" >
+	管线图例
+	<image src="${ctxPath}/static/img/map/close.svg"  onclick="hideLegen()"/>
+	</div>
+      <div class="con">
+		<div style="height:2rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/measure3.svg" /></div>
+		<div style="line-height:2.5rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">高水位</div>
+	  </div>
+      <div class="con">
+		<div style="height:2rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/measure2.svg" /></div>
+		<div style="line-height:2.5rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">中水位</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/measure1.svg" /></div>
+		<div style="line-height:2.5rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">低水位</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/measure4.svg" /></div>
+		<div style="line-height:2.5rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">水位距地面1米以内</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/waste.svg" /></div>
+		<div style="line-height:2.5rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">污水井</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/rain.svg" /></div>
+		<div style="line-height:2.1rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">雨水井</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/interflow.svg" /></div>
+		<div style="line-height:2.1rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">合流井</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/grid.svg" /></div>
+		<div style="line-height:2.1rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">井篦子</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/dot.svg" /></div>
+		<div style="line-height:2.1rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">管线地下连接点</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/arrow.svg" /></div>
+		<div style="line-height:2.1rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">入井水流方向</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/measure.svg" /></div>
+		<div style="line-height:2.5rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">监测点</div>
+	  </div>
+      <div class="con">
+		<div style="height:1.5rem;text-align:center;width:20%;float:left;margin-top:1.5rem;"><img src="${ctxPath}/static/img/map/overFlow.gif" /></div>
+		<div style="line-height:2.1rem;color:#fff;padding-left:1rem;width:80%;float:left;margin-top:1.5rem;">井盖溢流</div>
+	  </div>
+</div>
+	  <div class="input-card2">
+	     <input type="button" class="btn2" style="font-size:16px;width: 186px;text-align: center;outline:none;background: rgba(4, 222, 253, .4);" onclick="resetMap(map)" value="   总览图   "/>
+	     <input type="button" class="btn2" style="font-size:16px;width: 186px;text-align: center;outline:none;" onclick="showPolyline(0)" value="全部管线"/>
+	     <input type="button" class="btn2" style="font-size:16px;width: 186px;text-align: center;outline:none;background-color:#84C6C5;" onclick="showPolyline(1)" value="雨水管线"/>
+	     <input type="button" class="btn2" style="font-size:16px;width: 186px;text-align: center;outline:none;background-color:#3790D6;" onclick="showPolyline(2)" value="污水及雨污合流管线"/>
+	  </div>
+<!-- 加载地图JSAPI脚本 -->
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=0455088201bbd1799e13bfdacfb48ef4&&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar,AMap.ControlBar"></script>
+<script>
+    //初始化地图
+    var map = createMap();
+	var road='${road}';
+	var roadNameMap = new Map();
+	var wellMap = new Map();
+	var wellMapMonitoring = new Map();
+	var wellMapMonitoringOverFlow = new Map();
+	var pipelineMap = new Map();
+	var flowMarkerMap = new Map();
+	var maxLongitude = 0;
+	var minLongitude = 999999;
+	var maxLatitude = 0;
+	var minLatitude = 999999;
+	
+	var infoWindow = new AMap.InfoWindow({
+		isCustom: true,  //使用自定义窗体
+		offset: new AMap.Pixel(10, -10)
+	});	
+	var infoWindowPipeline = new AMap.InfoWindow({
+		isCustom: true,  //使用自定义窗体
+		offset: new AMap.Pixel(10, -20)
+	});
+	map.on('zoomchange', mapZoom);
+	setInterval(setLegendFlicker,1000);
+    var url="http://www.mocky.io/v2/5ddd45f52f0000345d7ea940";
+	//var url= "${ctxPath}/api/getAllInfo";
+	if(road!="") url="${ctxPath}/api/getAllInfo?road="+road;
+	$.ajax({
+		type:"GET",
+		url:url,
+		dataType:"jsonp",
+		success:function(response) {
+            wellMap.clear();
+            wellMapMonitoring.clear();
+            wellMapMonitoringOverFlow.clear();
+            pipelineMap.clear();
+            flowMarkerMap.clear();
+            //添加路名称
+            for (i = 0; i < response.data.roads.length; i++) {
+                var road = response.data.roads[i];
+                var textView = addText(road.title, road.type, road.position, map);
+                roadNameMap.set(road.title, textView);
+            }
+
+            /*//添加线路
+			for (i = 0; i < response.data.lines.length; i++) { 
+				var line = response.data.lines[i];
+				addLine(line.type,1,line.path,false,map);
+			}*/
+
+
+            //添加管道
+            if ((!(response.data.pipelines == undefined || response.data.pipelines == null || response.data.pipelines == ''))) {
+                for (i = 0; i < response.data.pipelines.length; i++) {
+                    var pipeline = response.data.pipelines[i];
+                    var animateFlag = true;
+                    if (pipeline.distance < 15) animateFlag = false;
+                    var polyline = addLine(pipeline.id, pipeline.type, pipeline.mainOrBranch, pipeline.path, animateFlag, map);
+                    polyline.pipeline = pipeline;
+                    pipelineMap.set(pipeline.id, polyline);
+                    polyline.on('mouseover', polylineMouseover);
+                    polyline.on('mouseout', polylineMouseout);
+                }
+            }
+            //添加井盖
+            if ((!(response.data.wells == undefined || response.data.wells == null || response.data.wells == ''))) {
+                for (i = 0; i < response.data.wells.length; i++) {
+                    var well = response.data.wells[i];
+                    var marker = addMarker(well, map);
+                    setMaxAndMinCoordinate(well.coordinate);
+                    marker.well = well;
+                    marker.on('mouseover', markerMouseover);
+                    marker.on('mouseout', markerMouseout);
+                    if (well.deviceCode == "") {
+                        marker.hide();
+                        wellMap.set(well.id, marker);
+                    } else {
+                        marker.well.waterLevel = "-";
+                        marker.well.heightToGround = "-";
+                        marker.well.overFlow = false;
+                        marker.well.iconBackground = "";
+                        wellMapMonitoring.set(well.id, marker);
+                        var overFlowMarker = new AMap.Marker({
+                            position: well.coordinate,
+                            offset: new AMap.Pixel(-10, -20),
+                            icon: "${ctxPath}/static/img/map/overFlow.gif"
+                        });
+                        map.add(overFlowMarker);
+                        overFlowMarker.hide();
+                        wellMapMonitoringOverFlow.set(well.id, overFlowMarker);
+                    }
+                }
+                setInterval(getWaterRegiment, 3000);
+                if (maxLatitude > minLatitude && maxLongitude > minLongitude) {
+                    map.setCenter([(maxLongitude + minLongitude) / 2, (maxLatitude + minLatitude) / 2]);
+                }
+                setBound(map);
+            }
+        }
+	});
+	function setMaxAndMinCoordinate(coordinate){
+		if(coordinate[0]>maxLongitude) maxLongitude=coordinate[0];
+		if(coordinate[0]<minLongitude) minLongitude=coordinate[0];
+		if(coordinate[1]>maxLatitude) maxLatitude=coordinate[1];
+		if(coordinate[1]<minLatitude) minLatitude=coordinate[1];
+	}
+	function setBound(mapObject){
+		if(minLongitude<maxLongitude && minLatitude<maxLatitude){
+			var bounds = new AMap.Bounds([minLongitude, minLatitude], [maxLongitude, maxLatitude]);
+			mapObject.setBounds(bounds);
+			mapObject.setLimitBounds(bounds);		
+		}
+	}
+	function resetMap(mapObject){
+		setBound(mapObject);
+		mapObject.setPitch(45);
+	}
+	function setLegendFlicker(){
+		wellMapMonitoring.forEach(function (item) {
+			if(item.well.overFlow){
+				if(item.well.iconBackground == "darkRed"){
+					item.setIcon(getMeasureWellIcon(4));
+					item.well.iconBackground = "lightRed"
+				}else{
+					item.setIcon(getMeasureWellIcon(5));
+					item.well.iconBackground = "darkRed"					
+				}
+			}
+		});		
+	}
+	function getWaterRegiment(){
+		if(map.getZoom()>=16){
+			$.ajax({
+				type:"GET",
+				//url:"${ctxPath}/api/getWaterRegiment",
+                url:"http://www.mocky.io/v2/5ddbf2f73400008c4feae013",
+				dataType:"jsonp",
+				//async:true,    //实现在请求没有完全处理完之前锁定浏览器，不做后面的操作
+				success:function(response){
+				    $(response.data.wells).each(function (index,element) {
+						if((!(wellMapMonitoring.get(element.id) == undefined || wellMapMonitoring.get(element.id) ==null || wellMapMonitoring.get(element.id) == ''))){
+							wellMapMonitoring.get(element.id).well.waterLevel = element.waterLevel;
+							wellMapMonitoring.get(element.id).well.heightToGround = element.heightToGround;
+							wellMapMonitoring.get(element.id).well.overFlow = element.overFlow;
+							if(element.overFlow){
+								wellMapMonitoringOverFlow.get(element.id).show();
+								//wellMapMonitoring.get(element.id).setIcon(getMeasureWellIcon(4));
+							}else{
+								wellMapMonitoringOverFlow.get(element.id).hide();
+								if(element.waterLevel>70){
+									wellMapMonitoring.get(element.id).setIcon(getMeasureWellIcon(3));
+								}else if(element.waterLevel>30){
+									wellMapMonitoring.get(element.id).setIcon(getMeasureWellIcon(2));
+								}else if(element.waterLevel>1){
+									wellMapMonitoring.get(element.id).setIcon(getMeasureWellIcon(1));								
+								}else{
+									wellMapMonitoring.get(element.id).setIcon(getMeasureWellIcon(0));							
+								}
+							}			
+						}
+                    });
+				}
+			});
+			
+		}
+	}
+	//鼠标移入井盖范围显示窗体
+	function markerMouseover(e){
+		var content = [];
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>所在管线：" + e.target.well.road + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>井口编号：" + e.target.well.pointNo + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>井口坐标：" + e.target.well.coordinate + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>水井类型：" + e.target.well.typeStr + "</p><br/>");
+		if(e.target.well.deviceCode!=""){
+			content.push("<p style='color:#fff;float:left;padding-left:1rem;'>水井深度：" + e.target.well.deep + "米</p><br/>");
+			content.push("<p style='color:#fff;float:left;padding-left:1rem;'>管线直径：" + e.target.well.diameter + "CM</p><br/>");
+			content.push("<p style='color:#fff;float:left;padding-left:1rem;'>当前管内水位：" + e.target.well.waterLevel + "%</p><br/>");
+			content.push("<p style='color:#fff;float:left;padding-left:1rem;'>水位距地面高度：" + e.target.well.heightToGround + "米</p><br/>");	
+		}
+		infoWindow.setContent(createInfoWindow(content));
+        infoWindow.open(map, [e.lnglat.getLng(),e.lnglat.getLat()]);
+	}
+	//鼠标移出井盖范围关闭窗体
+	function markerMouseout(e){
+		infoWindow.close();
+	}
+	//鼠标移入管线范围显示窗体
+	function polylineMouseover(e){
+		var content = [];
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>管线名称：" + e.target.pipeline.road + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>管线类型：" + e.target.pipeline.typeStr + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>当前管长：" + e.target.pipeline.distance + "米</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>管线总长：" + e.target.pipeline.totalDistance + "米</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>管线材质：" + e.target.pipeline.material + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>管线直径：" + e.target.pipeline.diameter + "</p><br/>");
+		content.push("<p style='color:#fff;float:left;padding-left:1rem;'>建设年代：" + e.target.pipeline.createDate + "</p><br/>");
+		infoWindow.setContent(createInfoWindow(content));
+        infoWindow.open(map, [e.lnglat.getLng(),e.lnglat.getLat()]);
+	}
+	//鼠标移出管线范围关闭窗体
+	function polylineMouseout(e){
+		infoWindow.close();
+	}	
+
+	//创建地图
+	function createMap(){
+		//初始化地图
+		var map = new AMap.Map('container', {
+			resizeEnable: true,
+			rotateEnable:true,
+			pitchEnable:true,    
+			expandZoomRange:true,
+			zoom:16,
+			zooms:[15,20],
+			pitch:45,
+			//rotation:-80,
+			viewMode:'3D',//开启3D视图,默认为关闭
+			buildingAnimation:true,//楼块出现是否带动画    
+			expandZoomRange:true,
+			features:["bg","road","building","point"],
+			mapStyle:"amap://styles/ee51392e533e7733b704871ffc7735c1"
+		});		
+		// 添加 3D 罗盘控制
+		//map.addControl(new AMap.ControlBar({showZoomBar: true, position: {right:'10px',bottom:'-160px'}}));
+		//map.addControl(new AMap.Scale({visible: true}));
+		//map.addControl(new AMap.ToolBar({visible: true,position: "LT"}));
+		//map.addControl(new AMap.OverView({visible: true}));
+
+		return map
+	}
+	function mapZoom(){
+		flowMarkerMap.forEach(function (item) {
+			if(map.getZoom()<18){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+		wellMap.forEach(function (item) {
+			if(map.getZoom()<19.5){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+
+		roadNameMap.forEach(function (item) {
+			if(map.getZoom()<17){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+    }
+	function showPolyline(type){
+		pipelineMap.forEach(function (item) {
+			if((!(flowMarkerMap.get(item.pipeline.id) == undefined || flowMarkerMap.get(item.pipeline.id) ==null || flowMarkerMap.get(item.pipeline.id) == ''))){
+				if(type==0){
+					item.show();
+					if(item.pipeline.mainOrBranch==1){
+						flowMarkerMap.get(item.pipeline.id).show();
+					}				
+				}else{
+					if(item.pipeline.type==type){
+						item.show();
+						if(item.pipeline.mainOrBranch==1){
+							flowMarkerMap.get(item.pipeline.id).show();
+						}
+					}else{
+						item.hide();
+						if(item.pipeline.mainOrBranch==1){
+							flowMarkerMap.get(item.pipeline.id).hide();
+						}
+					}	
+				}			
+			}
+		});
+    }
+
+	//构建自定义信息窗体
+	function createInfoWindow(content) {
+		var info = document.createElement("div");
+		info.className = "info-div";
+		// 定义中部内容
+		var middle = document.createElement("div");
+		middle.className = "info-middle";
+		middle.style.backgroundColor = 'black';
+		middle.innerHTML = content;
+		info.appendChild(middle);
+		return info;
+	}
+	function addText(textStr,type,textPosition,mapObject){
+	    var text = new AMap.Text({
+        text:textStr,
+        anchor:'center', // 设置文本标记锚点
+        draggable:false,
+        cursor:'pointer',
+        autoRotation:true,
+		offset: new AMap.Pixel(0, -40),
+        style:{
+            'background-color': 'transparent ',
+            'border-width': 0,
+            'color': 'white',
+			'font-size': '20px',
+			'font-family':'STZhongsong',
+            'color': getLineColor(type)
+        },
+        position:textPosition
+		});
+		text.setMap(mapObject);
+		return text;
+	}
+	//添加线路
+	function addLine(id,type,mainOrBranch,positionArray,animateFlag,mapObject){
+		var strokeWidth = 4;
+		if(mainOrBranch==0){
+			strokeWidth = 2;
+		}
+		var polyline = new AMap.Polyline({
+			map: mapObject,
+			path: positionArray,            // 设置线覆盖物路径
+			strokeColor: getLineColor(type),   // 线颜色
+            offset: new AMap.Pixel(0, 0),
+			strokeWeight: strokeWidth,           // 线宽
+		});
+		if(animateFlag && mainOrBranch==1){
+			var marker = new AMap.Marker({
+				map: mapObject,
+				position: positionArray[0],
+				icon: "${ctxPath}/static/img/map/right-arrow.svg",
+				offset: new AMap.Pixel(0, 0),
+				anchor:"center",
+				autoRotation: true
+			});
+			marker.type = type;
+			marker.moveAlong(positionArray, 15,function(k){return k}, true);
+			marker.hide();
+			flowMarkerMap.set(id,marker);
+		}
+		return polyline
+	}
+	//根据管道类型获取管道颜色
+	function getLineColor(type){
+		var color="#3790D6";
+		switch(type) {
+			 case 1:
+				color="#84C6C5";
+				break;
+			 case 2:
+				color="#3790D6";
+				break;
+			 default:
+		} 
+		return color
+	}
+	//添加井盖Marker
+	function addMarker(well,mapObject){	
+		var type = well.type;
+		if(well.deviceCode!=""){
+			type = -1;
+		}
+		var marker = new AMap.Marker({
+			position:well.coordinate,
+			offset: new AMap.Pixel(-10, -10),
+			icon:getWellIcon(type)
+		});
+		if(well.type==2){
+			marker.setzIndex(marker.getzIndex()/2);
+		}
+		mapObject.add(marker);
+		return marker;		
+	}
+	//根据井盖类型获取井盖图标
+	function getWellIcon(type){
+		var icon = "${ctxPath}/static/img/map/rain.svg";
+		//type:0雨水井盖 4污水井盖 3.雨污合流井盖 2井篦子 1.圆点 5.箭头，-1可探测水位井
+		switch(type) {
+			 case -1:
+				icon = "${ctxPath}/static/img/map/measure.svg";
+				break;
+			 case 0:
+				icon = "${ctxPath}/static/img/map/rain.svg";
+				break;
+			 case 4:
+				icon = "${ctxPath}/static/img/map/waste.svg";
+				break;
+			 case 3:
+				icon = "${ctxPath}/static/img/map/interflow.svg";
+				break;
+			 case 2:
+				icon = "${ctxPath}/static/img/map/grid.svg";
+				break;
+			 case 1:
+				icon = "${ctxPath}/static/img/map/dot.svg";
+				break;
+			 case 5:
+				icon = "${ctxPath}/static/img/map/arrow.svg";
+				break;
+			 default:
+		} 
+		return icon;
+	}
+	
+	function getMeasureWellIcon(backgroundType){
+		var icon = "${ctxPath}/static/img/map/measure.svg";
+		switch(backgroundType) {
+			 case 0:
+				icon = "${ctxPath}/static/img/map/measure.svg";
+				break;
+			 case 1:
+				icon = "${ctxPath}/static/img/map/measure1.svg";
+				break;
+			 case 2:
+				icon = "${ctxPath}/static/img/map/measure2.svg";
+				break;
+			 case 3:
+				icon = "${ctxPath}/static/img/map/measure3.svg";
+				break;
+			 case 4:
+				icon = "${ctxPath}/static/img/map/measure4.svg";
+				break;
+			 case 5:
+				icon = "${ctxPath}/static/img/map/measure5.svg";
+				break;
+			 default:
+		} 
+		return icon;
+	}	
+	//关闭信息窗体
+	function closeInfoWindow(mapObject) {
+		mapObject.clearInfoWindow();
+	}	
+	function setLegenVisibility(){
+		$("#legend").show();
+		$("#menu").toggle();
+	}
+	function hideLegen(){
+		$("#legend").hide();
+	}
+	function setMenuVisibility(){
+		$("#menu").toggle();
+	}
+    //限制地图显示范围
+    function lockMapBounds(mapObject) {
+      var bounds = mapObject.getBounds();
+      mapObject.setLimitBounds(bounds);
+    }
+
+    //取消地图显示限制
+    function unlockMapBounds(mapObject) {
+      mapObject.clearLimitBounds();
+    }
+</script>
+</body>
+</html>

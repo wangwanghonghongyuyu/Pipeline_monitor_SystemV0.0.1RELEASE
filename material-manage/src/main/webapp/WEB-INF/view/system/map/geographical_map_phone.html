@@ -1,0 +1,695 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>管道地图</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <style>
+        html, body, #container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .content-window-card {
+            position: relative;
+            box-shadow: none;
+            bottom: 0;
+            left: 0;
+            width: auto;
+            padding: 0;
+        }
+
+        .content-window-card p {
+            height: 2rem;
+        }
+
+        .custom-info {
+            border: solid 1px silver;
+        }
+
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+
+        div.info-middle {
+            font-size: 12px;
+            padding: 10px 6px;
+            line-height: 20px;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+		.div-legend {
+		  display:flex;
+		  flex-direction: column;
+		  min-width: 0;
+		  word-wrap: break-word;
+		  background-color: #fff;
+		  background-clip: border-box;
+		  border-radius: .25rem;
+		  width: 100%;
+		  border-width: 0;
+		  border-radius: 0.4rem;
+		  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+		  position: fixed;
+		  bottom: 0rem;
+		  right: 0rem;
+		  -ms-flex: 1 1 auto;
+		  flex: 1 1 auto;
+		  padding: 0rem 0rem 2rem;
+		}
+		.div-menu {
+		  display: flex;
+		  flex-direction: column;
+		  min-width: 0;
+		  word-wrap: break-word;
+		  position: fixed;
+		  top: 20px;
+		  right: 10px;
+		  -ms-flex: 1 1 auto;
+		  flex: 1 1 auto;
+		}
+	.con{width:100%;margin-top:1.5rem;padding-left:1.5rem;padding-right:1.5rem;}
+	
+	.menu{
+		  display: flex;
+		  flex-direction: column;
+		  min-width: 0;
+		  word-wrap: break-word;
+		  background-color: #2280E9;
+		  background-clip: border-box;
+		  border-radius: .25rem;
+		  width: 10rem;
+		  height: 5.2rem;
+		  border-width: 0;
+		  border-radius: 0.4rem;
+		  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+		  position: fixed;
+		  top: 68px;
+		  right: 5px;
+		  -ms-flex: 1 1 auto;
+		  flex: 1 1 auto;
+		}
+		.arrow-menu{
+		  display: flex;
+		  flex-direction: column;
+		border-left: 1rem solid transparent;
+		border-right: 1rem solid transparent;
+		border-bottom: 1rem solid #2280E9;
+		width: 0px;
+		height: 0px;
+		position: relative;
+		top:-1rem;
+		left:7rem;
+		}
+		.info-div{
+		  min-width: 0;
+		  word-wrap: break-word;
+		  background-color: #fff;
+		  background-clip: border-box;
+		  border-radius: .25rem;
+		  width: 28rem;
+		  border-width: 0;
+		  border-radius: 0.4rem;
+		  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+		  position: relative;
+		  left: 0rem;
+		  bottom: 0rem;
+		  padding: 0rem 0rem;
+		}
+		.arrow-info{
+		  display: flex;
+		  flex-direction: column;
+		border-left: 1rem solid transparent;
+		border-right: 1rem solid transparent;
+		border-top: 1rem solid #fff;
+		width: 0px;
+		height: 0px;
+		position: relative;
+		left:12rem;
+		top:1rem;
+		}
+
+    </style>
+    <script type="text/javascript" src="https://www.w3school.com.cn/jquery/jquery.js"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div class="amap-geo amap-toolbar-geo"></div>
+<div class="div-menu">
+    <img src="${ctxPath}/static/img/map/menu.png" style="width:35px;height:35px;" onclick="setMenuVisibility()"/>
+    <div class="menu" id="menu" style="display:none;">
+        <div class="arrow-menu"></div>
+        <h4 id="legendBtn" style="background-color: #2280E9; color:#fff; width:100%; padding-left:1.5rem;margin-bottom:0rem;line-height:1.2rem;"
+            onclick="setLegenVisibility()">显示管线图例</h4>		
+		<hr style="height:1px;border:none;border-top:1px solid #fff;margin-left:1.5rem;margin-right:1.5rem;" />
+        <h4 style="color:#fff; width:100%; padding-left:1.5rem;;margin-bottom:0rem;line-height:1.2rem;" onclick="{window.close();}">退出</h4>
+    </div>
+</div>
+<div class="div-legend" id="legend" style="display:none;">
+    <div class="info-top" style="border: 0px; border-radius: 0px; background-color:#2280E9;">
+        <div style="color: white;">管线图例</div>
+        <image src="${ctxPath}/static/img/map/close.png" onclick="hideLegen()"/>
+    </div>
+    <div class="con">
+        <div style="background-color:#ff0000;height:1.5rem;border:0.2rem solid #cc0000;width:10%;float:left;"></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">高水位</div>
+        <div style="background-color:#ff9900;height:1.5rem;border:0.2rem solid #cc6600;width:10%;float:left;"></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">中水位</div>
+    </div>
+    <div class="con">
+        <div style="background-color:#00cc33;height:1.5rem;border:0.2rem solid #339933;width:10%;float:left;"></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">低水位</div>
+        <div style="background-color:#959595;height:1.5rem;border:0.2rem solid #666666;width:10%;float:left;"></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">无水位信号</div>
+    </div>
+    <div class="con">
+        <div id="legend1" colorValue="purple"
+             style="background-color:#ff00ff;height:1.5rem;border:0.2rem solid #b70ccb;width:10%;float:left;"></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">超过管内水位1m以内</div>
+        <div id="legend2" colorValue="red"
+             style="background-color:#ff0000;height:1.5rem;border:0.2rem solid #cc0000;width:10%;float:left;"></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">超过管内水位1m以上</div>
+    </div>
+    <div class="con">
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/waste.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">污水井</div>
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/rain.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">雨水井</div>
+    </div>
+    <div class="con">
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/interflow.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">合流井</div>
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/grid.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">井篦子</div>
+    </div>
+    <div class="con">
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/dot.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">管线地下连接点</div>
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/arrow.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">入井水流方向</div>
+    </div>
+    <div class="con">
+        <div style="height:1.5rem;text-align:center;width:10%;float:left;"><img src="${ctxPath}/static/img/map/overFlow.png"/></div>
+        <div style="color:#000;padding-left:1rem;width:40%;float:left;">井盖溢流</div>
+    </div>
+</div>
+<!-- 加载地图JSAPI脚本 -->
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=0455088201bbd1799e13bfdacfb48ef4&&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar,AMap.ControlBar"></script>
+<script>
+    //初始化地图
+    var map = createMap();
+	var pipelinesForBlow1= [];
+	var pipelinesForOver1= [];
+	var wellMap = new Map();
+	var wellMapForOverFlow = new Map();
+	var wellOtherMap = new Map();
+	var pipelineMap = new Map();
+	var maxLongitude = 0;
+	var minLongitude = 999999;
+	var maxLatitude = 0;
+	var minLatitude = 999999;
+	
+	var infoWindowWell = new AMap.InfoWindow({
+		isCustom: true,  //使用自定义窗体
+		offset: new AMap.Pixel(10, -10)
+	});	
+	var infoWindowPipeline = new AMap.InfoWindow({
+		isCustom: true,  //使用自定义窗体
+		offset: new AMap.Pixel(10, -20)
+	});
+	map.on('zoomchange', mapZoom);
+	setInterval(setLegendFlicker,1000);
+	$.ajax({
+		type:"GET",
+		url:"${ctxPath}/api/getAllInfo",
+		dataType:"json",
+		success:function(response){
+			wellMap.clear();
+			wellOtherMap.clear();
+			wellMapForOverFlow.clear();
+			pipelineMap.clear();
+			for (i = 0; i < response.data.wells.length; i++) { 
+				var well = response.data.wells[i]
+				var position = [well.coordinate.longitude,well.coordinate.latitude];
+				var marker=addMarker(well.type,map,position);
+				var content = [];
+					content.push("<p style='color:#000;float:left;padding-left:1rem;'>井口编号：" + well.pointNo + "</p><br/>");
+					content.push("<p style='color:#000;float:left;padding-left:1rem;'>井口坐标：" + well.coordinate.longitude + "," + well.coordinate.latitude + "(经纬度)</p><br/>");
+					//content.push("<p style='color:#000;float:left;padding-left:1rem;'>井口直径：" + well.diameter + "(cm)</p><br/>");
+					//content.push("<p style='color:#000;float:left;padding-left:1rem;'>井盖材质：" + well.material + "</p><br/>");
+					//if(well.type==1){
+					//	content.push("<p style='color:#000;float:left;padding-left:1rem;'>水井类型：雨水井</p><br/>");
+					//}else{
+					//	content.push("<p style='color:#000;float:left;padding-left:1rem;'>水井类型：污水井</p><br/>");
+					//}		
+					content.push("<p style='color:#000;float:left;padding-left:1rem;'>水井深度：" + well.elevation + "(cm)</p><br/>");
+					content.push("<p style='color:#000;float:left;padding-left:1rem;'>井内水位：--</p><br/>");
+				marker.content = content;
+				marker.type = well.type;
+				marker.on('click', markerClick);
+				if(well.type == "2"){
+					marker.hide();
+					wellOtherMap.set(well.pointNo,marker);
+				}else{
+					wellMap.set(well.pointNo,marker);
+					var markerTemp = new AMap.Marker({
+						position:position,
+						icon:'overFlow.png',
+						offset: new AMap.Pixel(-12, -20)
+					});
+					markerTemp.content = content;
+					markerTemp.on('click', markerClick);
+					wellMapForOverFlow.set(well.pointNo,markerTemp);
+				}	
+				setMaxAndMinCoordinate(well.coordinate.longitude,well.coordinate.latitude);
+			}
+			map.setCenter([(maxLongitude+minLongitude)/2,(maxLatitude+minLatitude)/2]);
+			for (i = 0; i < response.data.pipelines.length; i++) { 
+				var pipeline = response.data.pipelines[i];
+				addPipeline(pipeline,map);
+			}
+			//TODO
+			//setInterval(getWaterRegiment,1000);
+		}
+    });
+	function setMaxAndMinCoordinate(longitude,latitude){
+		if(longitude>maxLongitude) maxLongitude=longitude;
+		if(longitude<minLongitude) minLongitude=longitude;
+		if(latitude>maxLatitude) maxLatitude=latitude;
+		if(latitude<minLatitude) minLatitude=latitude;
+		
+	}
+	function setLegendFlicker(){
+		if($("#legend1").attr("colorValue")=="purple"){
+			$("#legend1").css("background","#959595");
+			$("#legend1").css("border","0.2rem solid #666666");
+			$("#legend1").attr("colorValue","gray");
+		}else{
+			$("#legend1").css("background","#ff00ff");
+			$("#legend1").css("border","0.2rem solid #b70ccb");
+			$("#legend1").attr("colorValue","purple");
+		}
+		if($("#legend2").attr("colorValue")=="red"){
+			$("#legend2").css("background","#0099FF");
+			$("#legend2").css("border","0.2rem solid #087CCB");
+			$("#legend2").attr("colorValue","blue");
+		}else{
+			$("#legend2").css("background","#ff0000");
+			$("#legend2").css("border","0.2rem solid #cc0000");
+			$("#legend2").attr("colorValue","red");
+		}
+		
+		for(i=0;i<pipelinesForBlow1.length;i++){
+			var tempPipeline=pipelinesForBlow1[i];
+			if(tempPipeline.getOptions().strokeColor =='#ff00ff'){
+				tempPipeline.setOptions({strokeColor: '#959595'});
+				tempPipeline.setOptions({outlineColor: '#666666'});
+			}else{
+				tempPipeline.setOptions({strokeColor: '#ff00ff'});
+				tempPipeline.setOptions({outlineColor: '#b70ccb'});
+			}
+		}
+		for(i=0;i<pipelinesForOver1.length;i++){
+			var tempPipeline=pipelinesForOver1[i];
+			if(tempPipeline.getOptions().strokeColor =='#FF0000'){
+				tempPipeline.setOptions({strokeColor: '#0099FF'});
+				tempPipeline.setOptions({outlineColor: '#087CCB'});
+			}else{
+				tempPipeline.setOptions({strokeColor: '#FF0000'});
+				tempPipeline.setOptions({outlineColor: '#cc0000'});
+			}
+		}
+		
+	}
+	function getWaterRegiment(){
+		if(map.getZoom()>=16){
+			$.ajax({
+				type:"GET",
+				url:"${ctxPath}/api/getWaterRegiment",
+				dataType:"json",
+				//async:true,    //实现在请求没有完全处理完之前锁定浏览器，不做后面的操作
+				success:function(response){
+				    $(response.data.wells).each(function (index,element) {
+                        var well = wellMap.get(element.pointNo);
+                        well.content.pop();
+                        well.content.push("<p style='color:#000;float:left;padding-left:1rem;'>井内水位：" + element.waterLevel + "(m)</p><br/>");
+                        if(element.overFlow){
+                            wellMapForOverFlow.get(element.pointNo).setMap(map);
+                        }else{
+                            wellMapForOverFlow.get(element.pointNo).setMap(null);
+                        }
+                    });
+
+						pipelinesForBlow1=[];
+						pipelinesForOver1=[];
+					for (i = 0; i < response.data.pipelines.length; i++) { 					
+						var startWellPipeline = pipelineMap.get("startWell"+ response.data.pipelines[i].pipelineId);
+						var startWaterLevel = response.data.pipelines[i].startWaterLevel;
+						var startAboverWaterLevel = response.data.pipelines[i].startAboverWaterLevel;
+						
+						if(startWaterLevel < 0){
+							startWellPipeline.setOptions({strokeColor: '#959595'});
+							startWellPipeline.setOptions({outlineColor: '#666666'});
+							startWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：--</p><br/>"
+						}else if(startWaterLevel <= 30){
+							startWellPipeline.setOptions({strokeColor: '#00cc33'});
+							startWellPipeline.setOptions({outlineColor: '#339933'});
+							startWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：" + startWaterLevel + "%</p><br/>";
+						}else if(startWaterLevel <= 70){
+							startWellPipeline.setOptions({strokeColor: '#ff9900'});	
+							startWellPipeline.setOptions({outlineColor: '#cc6600'});
+							startWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：" + startWaterLevel + "%</p><br/>";				
+						}else if(startWaterLevel <= 100){
+							startWellPipeline.setOptions({strokeColor: '#ff0000'});
+							startWellPipeline.setOptions({outlineColor: '#cc0000'});
+							startWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：" + startWaterLevel + "%</p><br/>";
+						}else if(startAboverWaterLevel<1) {
+							pipelinesForBlow1.push(startWellPipeline);	
+							startWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：100%</p><br/>";		
+						} else {
+							pipelinesForOver1.push(startWellPipeline);	
+							startWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：100%</p><br/>";
+						}	 
+						
+						var endWellPipeline = pipelineMap.get("endWell"+ response.data.pipelines[i].pipelineId);
+						var endWaterLevel = response.data.pipelines[i].endWaterLevel;
+						var endAboverWaterLevel = response.data.pipelines[i].endAboverWaterLevel;
+						
+						if(endWaterLevel < 0){
+							endWellPipeline.setOptions({strokeColor: '#959595'});
+							endWellPipeline.setOptions({outlineColor: '#666666'});
+							endWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：--</p><br/>"
+						}else if(endWaterLevel <= 30){
+							endWellPipeline.setOptions({strokeColor: '#00cc33'});
+							endWellPipeline.setOptions({outlineColor: '#339933'});
+							endWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：" + endWaterLevel + "%</p><br/>";
+						}else if(endWaterLevel <= 70){
+							endWellPipeline.setOptions({strokeColor: '#ff9900'});
+							endWellPipeline.setOptions({outlineColor: '#cc6600'});
+							endWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：" + endWaterLevel + "%</p><br/>";
+						}else if(endWaterLevel <= 100){
+							endWellPipeline.setOptions({strokeColor: '#ff0000'});
+							endWellPipeline.setOptions({outlineColor: '#cc0000'});
+							endWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：" + endWaterLevel + "%</p><br/>";
+						}else if(endAboverWaterLevel<1) {
+							pipelinesForBlow1.push(endWellPipeline);
+							endWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：100%</p><br/>";
+						} else {
+							pipelinesForOver1.push(endWellPipeline);
+							endWellPipeline.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：100%</p><br/>";
+						}	
+					}
+				}
+			});
+			
+		}
+	}
+
+	function markerClick(e) {
+        infoWindowWell.setContent(createInfoWindow('水井数据', e.target.content));
+        infoWindowWell.open(map, [e.lnglat.getLng(),e.lnglat.getLat()]);
+    }
+	function addMarker(type,mapObject,position){
+		//type:0雨水井盖 4污水井盖 3.雨污合流井盖 2井篦子 1.圆点 5.箭头
+		var marker = new AMap.Marker({
+			position:position,
+			offset: new AMap.Pixel(-10, -10)
+		});
+		switch(type) {
+			 case 0:
+				marker.setIcon("${ctxPath}/static/img/map/book.svg");
+				break;
+			 case 4:
+				marker.setIcon("${ctxPath}/static/img/map/waste.png");
+				break;
+			 case 3:
+				marker.setIcon("${ctxPath}/static/img/map/interflow.png");
+				break;
+			 case 2:
+				marker.setIcon("${ctxPath}/static/img/map/grid.png");
+				break;
+			 case 1:
+				marker.setIcon("${ctxPath}/static/img/map/dot.png");
+				break;
+			 case 5:
+				marker.setIcon("${ctxPath}/static/img/map/arrow.png");
+				break;
+			 default:
+		}
+		mapObject.add(marker);
+		return marker;
+	}
+			
+	function polylineClick(e) {
+		var content = []
+		content.push(e.target.content);
+		content.push(e.target.waterLevel);
+        infoWindowPipeline.setContent(createInfoWindow('管道数据', content));
+        infoWindowPipeline.open(map, [e.lnglat.getLng(),e.lnglat.getLat()]);
+    }	
+	function addPipeline(pipeline,mapObject){
+		var content = [];
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>起点坐标：" + pipeline.startWellCoordinate.longitude + "," + pipeline.startWellCoordinate.latitude + "(经纬度)</p><br/>");
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>终点坐标：" + pipeline.endWellCoordinate.longitude + "," + pipeline.endWellCoordinate.latitude + "(经纬度)</p><br/>");
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>管线直径：" + pipeline.diameter + "(cm)</p><br/>");
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>管线用途：" + pipeline.remark + "</p><br/>");
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>管线材质：" + pipeline.material + "</p><br/>");
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>管线长度：" + pipeline.distance + "(m)</p><br/>");						
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>所在道路：" + pipeline.road + "</p><br/>");
+			content.push("<p style='color:#000;float:left;padding-left:1rem;'>建设年代：" + pipeline.createDate + "</p><br/>");
+		var polyline1 = new AMap.Polyline({
+			path: [[pipeline.startWellCoordinate.longitude,pipeline.startWellCoordinate.latitude],[pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude]],            // 设置线覆盖物路径
+			strokeColor: '#C0C0C0',   // 线颜色
+			strokeWeight: 10,           // 线宽
+			isOutline: true,
+			borderWeight: 2,
+			outlineColor:'#ffffff',
+			showDir:true
+		});		
+		polyline1.content = content;
+		polyline1.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：--</p><br/>"
+		polyline1.position = [pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude];
+		polyline1.on('click', polylineClick);
+		mapObject.add(polyline1);
+		pipelineMap.set("startWell"+ pipeline.pipelineId, polyline1);
+		if(pipeline.pointBCoordinate == "" || pipeline.pointBCoordinate == null){
+			var polyline2 = new AMap.Polyline({
+				path: [[pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude],[pipeline.endWellCoordinate.longitude,pipeline.endWellCoordinate.latitude]],            // 设置线覆盖物路径
+				strokeColor: '#C0C0C0',   // 线颜色
+				strokeWeight: 10,           // 线宽
+				isOutline: true,
+				borderWeight: 2,
+				outlineColor:'#ffffff',
+				showDir:true
+			});		
+			polyline2.content = content;
+			polyline2.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：--</p><br/>"
+			polyline2.position = [pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude];
+			polyline2.on('click', polylineClick);
+			mapObject.add(polyline2);
+			pipelineMap.set("endWell"+ pipeline.pipelineId, polyline2);			
+		}else{
+			var polyline3 = new AMap.Polyline({
+				path: [[pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude],[pipeline.pointBCoordinate.longitude,pipeline.pointBCoordinate.latitude]],            // 设置线覆盖物路径
+				strokeColor: '#C0C0C0',   // 线颜色
+				strokeWeight: 10,           // 线宽
+				isOutline: true,
+				borderWeight: 2,
+				outlineColor:'#ffffff',
+				showDir:true
+			});		
+			polyline3.content = content;
+			polyline3.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：--</p><br/>"
+			polyline3.position = [pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude];
+			polyline3.on('click', polylineClick);
+			mapObject.add(polyline3);
+			var polyline4 = new AMap.Polyline({
+				path: [[pipeline.pointBCoordinate.longitude,pipeline.pointBCoordinate.latitude],[pipeline.endWellCoordinate.longitude,pipeline.endWellCoordinate.latitude]],            // 设置线覆盖物路径
+				strokeColor: '#C0C0C0',   // 线颜色
+				strokeWeight: 10,           // 线宽
+				isOutline: true,
+				borderWeight: 2,
+				outlineColor:'#ffffff',
+				showDir:true
+			});		
+			polyline4.content = content;
+			polyline4.waterLevel = "<p style='color:#000;float:left;padding-left:1rem;'>管内水位：--</p><br/>"
+			polyline4.position = [pipeline.pointACoordinate.longitude,pipeline.pointACoordinate.latitude];
+			polyline4.on('click', polylineClick);
+			mapObject.add(polyline4);
+			pipelineMap.set("endWell"+ pipeline.pipelineId, polyline4);	
+		}
+	}
+	//创建地图
+	function createMap(){
+		//初始化地图
+		var map = new AMap.Map('container', {
+			resizeEnable: true,
+			rotateEnable:true,
+			pitchEnable:true,
+			zoom:20,
+			zooms:[3,20],
+			pitch:45,
+			rotation:-80,
+			viewMode:'3D',//开启3D视图,默认为关闭
+			buildingAnimation:true,//楼块出现是否带动画    
+			expandZoomRange:true,
+			features:["bg","road","building","point"]
+		});
+		// 添加 3D 罗盘控制
+		//map.addControl(new AMap.ControlBar({showZoomBar: true, position: "LT"}));
+		//map.addControl(new AMap.Scale({visible: true}));
+		//map.addControl(new AMap.ToolBar({visible: true,position: "LT"}));
+		//map.addControl(new AMap.OverView({visible: true}));
+		AMap.plugin('AMap.Geolocation', function() {
+			var geolocation = new AMap.Geolocation({
+				enableHighAccuracy: true,//是否使用高精度定位，默认:true
+				timeout: 10000,          //超过10秒后停止定位，默认：5s
+				buttonPosition:'LT',    //定位按钮的停靠位置
+				buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+				zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+
+			});
+			map.addControl(geolocation);
+			geolocation.getCurrentPosition(function(status,result){
+				if(status=='complete'){
+					map.setCenter(result.position);
+				}
+			});
+		});
+		
+		return map
+	}
+	function mapZoom(){
+	    wellMapForOverFlow.forEach(function (item) {
+			if(map.getZoom()<17){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+
+		wellOtherMap.forEach(function (item) {
+			if(map.getZoom()<19){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+		wellMap.forEach(function (item) {
+			if(map.getZoom()<17){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+		pipelineMap.forEach(function (item) {
+			if(map.getZoom()<16){
+				item.hide();
+			}else{
+				item.show();
+			}
+		});
+    }
+
+	//构建自定义信息窗体
+	function createInfoWindow(title,content) {
+		var info = document.createElement("div");
+		info.className = "info-div";
+		//可以通过下面的方式修改自定义窗体的宽高
+		//info.style.width = "270px";
+		// 定义顶部标题
+		var top = document.createElement("div");
+		var titleD = document.createElement("div");
+		var closeX = document.createElement("img");
+		top.className = "info-top";
+		top.style.border = '0px';
+		top.style.borderRadius = '0px';
+		top.style.backgroundColor = '#2280E9';
+		titleD.style.color = 'white';
+		titleD.innerHTML = title;
+		closeX.src = "${ctxPath}/static/img/map/close.png";
+		closeX.onclick = closeInfoWindow;
+
+		top.appendChild(titleD);
+		top.appendChild(closeX);
+		info.appendChild(top);
+
+		// 定义中部内容
+		var middle = document.createElement("div");
+		middle.className = "info-middle";
+		middle.style.backgroundColor = 'white';
+		middle.innerHTML = content.toString().replace(/,/g,"");
+		info.appendChild(middle);
+
+		// 定义底部内容
+		var bottom = document.createElement("div");
+		bottom.className = "arrow-info";
+		info.appendChild(bottom);
+
+		return info;
+	}
+	//关闭信息窗体
+	function closeInfoWindow() {
+		map.clearInfoWindow();
+	}	
+	function setLegenVisibility(){
+		$("#legend").show();
+		$("#menu").toggle();
+	}
+	function hideLegen(){
+		$("#legend").hide();
+	}
+	function setMenuVisibility(){
+		$("#menu").toggle();
+	}
+
+</script>
+</body>
+</html>

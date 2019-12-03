@@ -1,0 +1,216 @@
+html, body, #container {
+	height: 100%;
+	width: 100%;
+}
+
+div.info-top {
+	padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+	background: #2F3543 !important;
+    color: #fff !important;
+    border-color: #2F3543 !important;
+}
+
+div.info-top div {
+	display: inline-block;
+	color: #333333;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 31px;
+	padding: 0 10px;
+}
+
+div.info-top img {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	transition-duration: 0.25s;
+}
+
+div.info-top img:hover {
+	box-shadow: 0px 0px 5px #000;
+}
+
+.content-window-card {
+	position: relative;
+	box-shadow: none;
+	bottom: 0;
+	left: 0;
+	width: auto;
+	padding: 0;
+}
+
+.content-window-card p {
+	height: 2rem;
+}
+
+.custom-info {
+	border: solid 1px silver;
+}
+
+div.info-middle {
+	font-size: 16px;
+	padding: 10px 6px;
+	line-height: 20px;
+}
+
+span {
+	margin-left: 5px;
+	font-size: 11px;
+}
+
+.input-card2 {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	position: fixed;
+	bottom: 1rem;
+	left: 1rem;
+	flex: 1 1 auto;
+	padding: 0.75rem 1.25rem;
+}
+
+.btn2 {
+	font-weight: 400;
+	text-align: left;
+	white-space: nowrap;
+	vertical-align: middle;
+	user-select: none;
+	border: 1px solid transparent;
+	background-image: none;
+	-webkit-appearance: button;
+	cursor: pointer;
+	text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    box-shadow: 0 1.5px 3px rgba(0,0,0,.25);
+    background: rgba(194, 215, 218, 0.4);
+    color: #fff;
+    border-radius: 2em;
+    padding: 0 1.25em;
+    line-height: 2em;
+    margin: 9px 0 0 1em;
+    font-family: v,Segoe UI,sans-serif;
+    display: inline-block;
+    position: relative;
+    float: left;
+    clear: both;
+    text-decoration: none;
+    transition: 0.6s;
+}
+
+.btn2:hover {
+	color: #000;
+}
+
+.btn2:hover {
+	text-decoration: none
+}
+
+.info-middle img {
+	float: left;
+	margin-right: 6px;
+}
+
+.div-legend {
+	display: block;
+	margin-bottom: 20px;
+    background-color: #262834;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+	border-color: #2F3543 !important;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-clip: border-box;
+	width: 20rem;
+	position: fixed;
+	bottom: 1rem;
+	right: 10rem;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	padding: 0rem 0rem 2rem;
+}
+
+.div-menu {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	position: fixed;
+	top: 2rem;
+	right: 2rem;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+}
+
+.con {
+	width: 100%;
+	margin-top: 0.8rem;
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
+}
+
+.menu {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #000;
+	background-clip: border-box;
+	border-radius: .25rem;
+	width: 10rem;
+	height: 4rem;
+	border-width: 0;
+	border-radius: 0.4rem;
+	box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+	position: fixed;
+	top: 6rem;
+	right: 1.5rem;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+}
+
+.arrow-menu {
+	display: flex;
+	flex-direction: column;
+	border-left: 1rem solid transparent;
+	border-right: 1rem solid transparent;
+	border-bottom: 1rem solid #000;
+	width: 0px;
+	height: 0px;
+	position: relative;
+	top: -1rem;
+	left: 7rem;
+}
+
+.info-div {
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #000;
+	opacity: 0.7;
+	background-clip: border-box;
+	border-radius: .25rem;
+	border-width: 0;
+	border-radius: 0.4rem;
+	box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+	position: relative;
+	left: 0rem;
+	bottom: 0rem;
+	padding: 0.75rem 0rem;
+}
+
+.arrow-info {
+	display: flex;
+	flex-direction: column;
+	border-left: 1rem solid transparent;
+	border-right: 1rem solid transparent;
+	border-top: 1rem solid #000;
+	width: 0px;
+	height: 0px;
+	position: relative;
+	left: 12rem;
+}
