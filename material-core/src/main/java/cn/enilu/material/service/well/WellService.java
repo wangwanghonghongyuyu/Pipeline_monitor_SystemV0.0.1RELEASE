@@ -1,6 +1,8 @@
 package cn.enilu.material.service.well;
 
+import cn.enilu.material.bean.entity.system.Coordinate;
 import cn.enilu.material.bean.entity.system.Device;
+import cn.enilu.material.bean.entity.system.Pipeline;
 import cn.enilu.material.bean.entity.system.Well;
 import cn.enilu.material.bean.vo.well.CoordinateVo;
 import cn.enilu.material.bean.vo.well.WellVo;
@@ -58,8 +60,37 @@ public class WellService {
             CoordinateVo coordinateVo=coordinateService.findCoordinateById(entity.getCoordinateId());
             double [] coordinateArr={coordinateVo.getLongitude(),coordinateVo.getLatitude()};
             well.setCoordinate(coordinateArr);//位置点
+            calculationOfTheArrow(entity,well);//计算箭头方向
         }
         return well;
+    }
+
+    /**
+     * 计算箭头方向
+     * @return
+     */
+    public void calculationOfTheArrow(Well well,WellVo vo){
+        double[] coordinate2=new double[2];
+        for (Pipeline pipeline:InitDataService.pipelineMap.values()){
+            Integer startWellId=pipeline.getStartWellId();
+            if (startWellId!=null){
+                if (startWellId==well.getWellId()){
+                    Coordinate startCoordinate =InitDataService.coordinateMap.get(well.getCoordinateId());
+                    Well endWell=InitDataService.wellMap.get(pipeline.getEndWellId());
+                    Coordinate endCoordinate=InitDataService.coordinateMap.get(endWell.getCoordinateId());
+                    double x1=startCoordinate.getLongitude();
+                    double x2=endCoordinate.getLongitude();
+                    double y1=startCoordinate.getLatitude();
+                    double y2=startCoordinate.getLatitude();
+                    double x=(x1+(x2-x1))/1000000;
+                    double y=y1+(((x-x1)*(y2-y1))/(x2-x1));
+                    coordinate2[0]=x;
+                    coordinate2[1]=y;
+                    vo.setCoordinate2(coordinate2);
+                    return ;
+                }
+            }
+        }
     }
 
     /**

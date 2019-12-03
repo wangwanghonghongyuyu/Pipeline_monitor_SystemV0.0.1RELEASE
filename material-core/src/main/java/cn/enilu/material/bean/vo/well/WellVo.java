@@ -21,4 +21,5 @@ public class WellVo {
     private String road;
     private String typeStr;
     private double []coordinate;
+    private double []coordinate2;
 }
