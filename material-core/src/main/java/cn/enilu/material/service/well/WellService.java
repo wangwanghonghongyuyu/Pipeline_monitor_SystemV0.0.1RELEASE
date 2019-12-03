@@ -82,7 +82,7 @@ public class WellService {
                     double x2=endCoordinate.getLongitude();
                     double y1=startCoordinate.getLatitude();
                     double y2=startCoordinate.getLatitude();
-                    double x=(x1+(x2-x1))/1000000;
+                    double x=x1+(x2-x1)/1000000;
                     double y=y1+(((x-x1)*(y2-y1))/(x2-x1));
                     coordinate2[0]=x;
                     coordinate2[1]=y;
